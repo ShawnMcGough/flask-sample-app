@@ -50,13 +50,13 @@ To get the Flask app up and running on your local machine, follow these steps:
 
 5. **Run Tests:**
 
-   To run the unit tests, execute the following command:
+   To run the tests, execute the following command:
 
    ```bash
-   python -m unittest discover tests
+   pytest
    ```
 
-   This command will discover and run all tests in the `tests` directory.
+   This will automatically discover and run all tests in the `tests` directory.
 
 ## Application Routes
 
@@ -69,7 +69,7 @@ The application provides the following routes:
 
 ## Testing
 
-Unit tests are provided in the `tests` directory. They cover the basic functionality of the application, including route handling and response validation. You can use these tests as a reference to write your own tests or to verify the correctness of the application.
+Tests are written using [pytest](https://docs.pytest.org/) and are located in the `tests` directory. They cover the basic functionality of the application, including route handling and response validation. You can use these tests as a reference to write your own tests or to verify the correctness of the application.
 
 ## License
 

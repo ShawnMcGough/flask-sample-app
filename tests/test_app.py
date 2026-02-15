@@ -1,33 +1,37 @@
 # tests/test_app.py
 
-import unittest
+import pytest
 from app import app
 
-class TestAppRoutes(unittest.TestCase):
-    def setUp(self):
-        self.app = app.test_client()
-        self.app.testing = True
 
-    def test_hello_route(self):
-        response = self.app.get('/')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data.decode('utf-8'), "Hello, Flask!")
+@pytest.fixture
+def client():
+    app.testing = True
+    with app.test_client() as client:
+        yield client
 
-    def test_add_item_route(self):
-        response = self.app.post('/items', json={"name": "item1"})
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.get_json(), {'message': 'Item added successfully'})
 
-    def test_get_item_route(self):
-        response = self.app.get('/items/0')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.get_json(), {'item': {'name': 'item1'}})
+def test_hello_route(client):
+    response = client.get('/')
+    assert response.status_code == 200
+    assert response.data.decode('utf-8') == "Hello, Flask!"
 
-    def test_get_nonexistent_item_route(self):
-        response = self.app.get('/items/1')
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.get_json(), {'error': 'Item not found'})
 
-if __name__ == '__main__':
-    unittest.main()
+def test_add_item_route(client):
+    response = client.post('/items', json={"name": "item1"})
+    assert response.status_code == 201
+    assert response.get_json() == {'message': 'Item added successfully'}
+
+
+def test_get_item_route(client):
+    client.post('/items', json={"name": "item1"})
+    response = client.get('/items/0')
+    assert response.status_code == 200
+    assert response.get_json() == {'item': {'name': 'item1'}}
+
+
+def test_get_nonexistent_item_route(client):
+    response = client.get('/items/99999999')
+    assert response.status_code == 404
+    assert response.get_json() == {'error': 'Item not found'}
 
