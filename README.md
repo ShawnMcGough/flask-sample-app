@@ -66,6 +66,7 @@ The application provides the following routes:
 - `GET /items`: Returns a list of items.
 - `GET /items/{item_id}`: Returns the details of a specific item.
 - `POST /items`: Adds a new item to the list.
+- `DELETE /items/{item_id}`: Deletes a specific item by ID.
 
 ## Testing
 
