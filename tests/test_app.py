@@ -35,3 +35,16 @@ def test_get_nonexistent_item_route(client):
     assert response.status_code == 404
     assert response.get_json() == {'error': 'Item not found'}
 
+
+def test_delete_item_route(client):
+    client.post('/items', json={"name": "item1"})
+    response = client.delete('/items/0')
+    assert response.status_code == 204
+    assert response.data == b''
+
+
+def test_delete_nonexistent_item_route(client):
+    response = client.delete('/items/99999999')
+    assert response.status_code == 404
+    assert response.get_json() == {'error': 'Item not found'}
+
